@@ -3,6 +3,8 @@ import Sidebar from '../Core/Sidebar/sidebar';
 import Header from '../Core/Headers/Headers';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
+import { addEmp } from './helper/adminapicalls';
+import { Redirect } from 'react-router-dom';
 import 'react-phone-number-input/style.css';
 
 import { getDepts, getPos } from '../Admin/helper/adminapicalls';
@@ -18,7 +20,16 @@ const Error = styled.p`color: red;`;
 const Button = styled.button`margin-left: 40%;`;
 const AddNew = (props) => {
 	const { register, handleSubmit, errors } = useForm();
-	const onSubmit = (data) => console.log(data);
+	const onSubmit = (data) => {
+		console.log(data);
+		addEmp(data).then(data => {
+			if (data !== undefined) {
+				console.log("OK");
+				props.history.push('/emplist');
+			}
+			
+		})
+	}
 
 	const [ employee, setEmployee ] = useState({
 		salary: false,
@@ -143,6 +154,8 @@ const AddNew = (props) => {
 					)}
 				</select>
 				{errors.position && <Error>Position is Required</Error>}
+				<input value='0' name="salary" ref={register()} hidden />
+				<input value='0' name="role" ref={register()} hidden/>
 				<br />
 				<Button className="btn btn-success">Submit</Button>
 			</div>
