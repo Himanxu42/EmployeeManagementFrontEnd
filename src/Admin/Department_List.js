@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Headers from '../Core/Headers/Headers';
 import Sidebar from '../Core/Sidebar/sidebar';
-import pop from '../Core/helper/pop';
+
 import Alert from 'react-bootstrap/Alert';
 import { getDepts, delDept, AddDept } from '../Admin/helper/adminapicalls';
 const Table = styled.div``;
@@ -33,7 +33,6 @@ class Department_List extends React.Component {
 			}
 		});
 	}
-	pop = () => {};
 	addDept = (value) => {
 		if (value !== undefined) {
 			AddDept(value).then((data) => {
@@ -78,9 +77,9 @@ class Department_List extends React.Component {
 	render() {
 		return (
 			<div>
-				<Headers />
+				<Headers props={this.props}/>
 				<div className="">
-					<Row className="row container">
+					<Row className="row">
 						<div className="col-md-3">
 							<Sidebar />
 						</div>

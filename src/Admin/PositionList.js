@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Headers from '../Core/Headers/Headers';
 import Sidebar from '../Core/Sidebar/sidebar';
-import pop from '../Core/helper/pop';
+
 import Alert from 'react-bootstrap/Alert';
 import { getPos,delPos,AddPos } from '../Admin/helper/adminapicalls';
 const Table = styled.div``;
@@ -79,14 +79,14 @@ class Department_List extends React.Component {
 	render() {
 		return (
 			<div>
-				<Headers />
+				<Headers props={this.props}/>                                                                                                                                                                                                                                                                                                                      
 				<div className="">
-					<Row className="row container">
+					<Row className="row ">
 						<div className="col-md-3">
 							<Sidebar />
 						</div>
 
-						<div className="col-md-2  dptform">
+						<div className="col-md-2  dptform container">
 							<div class="cards  ">
 								<div class="form-group">
 									<Label for="comment">

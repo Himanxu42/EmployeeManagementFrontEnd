@@ -117,3 +117,18 @@ export const delEmp = (data) => {
         console.log(error);
       });
 }
+
+//update salary 
+export const updateEmployee = (employee) => {
+    return axios.put(`http://localhost:8000/api/update/${employee._id}`, {
+        data: {
+           employee
+        }
+      })
+      .then(function (response) {
+          return response;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+}

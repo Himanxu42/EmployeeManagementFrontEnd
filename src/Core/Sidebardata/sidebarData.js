@@ -7,29 +7,24 @@ import EventNoteIcon from '@material-ui/icons/EventNote';
 
  const Sidebardata =[
 	{
-		title:"Home",
-		icon:<HomeIcon />,
-		link:"/home"
-	},
-	{
 		title:"Employee List",
 		icon:<AutorenewIcon />,
-		link:"/emplist"
+		link:"/admin/dashboard"
 	},
 	{
 		title:"Position List",
 		icon:<ControlCameraIcon />,
-		link:"/positionlist"
+		link:"/admin/position"
 	},
 	{
 		title:"Department List",
 		icon:<DescriptionIcon />,
-		link:"/departmentlist"
+		link:"/admin/department"
 	},
 	{
 		title:"Payroll List",
 		icon:<EventNoteIcon />,
-		link:"/payrolllist"
+		link:"/admin/payrol"
 	}
 ]
 

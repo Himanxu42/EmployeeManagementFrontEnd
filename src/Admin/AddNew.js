@@ -4,11 +4,10 @@ import Header from '../Core/Headers/Headers';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { addEmp } from './helper/adminapicalls';
-import { Redirect } from 'react-router-dom';
-import 'react-phone-number-input/style.css';
+
 
 import { getDepts, getPos } from '../Admin/helper/adminapicalls';
-import PropTypes from 'prop-types';
+
 const Form = styled.form`
 	background-color: #e9e7e6;
 	margin-left: 130px;
@@ -22,14 +21,17 @@ const AddNew = (props) => {
 	const { register, handleSubmit, errors } = useForm();
 	const onSubmit = (data) => {
 		console.log(data);
-		addEmp(data).then(data => {
+		addEmp(data).then((data) => {
 			if (data !== undefined) {
-				console.log("OK");
-				props.history.push('/emplist');
+				console.log('OK');
+				props.history.push('/admin/dashboard');
+			} else {
+				console.log('OK');
+				//call alert component
+				showAlert();
 			}
-			
-		})
-	}
+		});
+	};
 
 	const [ employee, setEmployee ] = useState({
 		salary: false,
@@ -38,6 +40,18 @@ const AddNew = (props) => {
 	});
 	//destructure employee
 	var { departments, positions } = employee;
+
+	//alert code
+
+	const [ alert, setAlert ] = useState(false);
+	const showAlert = () => {
+		setAlert(true);
+	};
+
+	const closeAlert = () => {
+		setAlert(false);
+	};
+
 	//load values on load
 
 	useEffect(() => {
@@ -154,8 +168,8 @@ const AddNew = (props) => {
 					)}
 				</select>
 				{errors.position && <Error>Position is Required</Error>}
-				<input value='0' name="salary" ref={register()} hidden />
-				<input value='0' name="role" ref={register()} hidden/>
+				<input value="0" name="salary" ref={register()} hidden />
+				<input value="0" name="role" ref={register()} hidden />
 				<br />
 				<Button className="btn btn-success">Submit</Button>
 			</div>
@@ -163,17 +177,39 @@ const AddNew = (props) => {
 	);
 	return (
 		<div>
-			<Header />
-			<div className="row">
+			<Header props={props.history}/>
+
+			<div className="row ">
 				<div className="col-sm-3">
 					<Sidebar />
 				</div>
-				<div className="col-sm-7 ">{addNewForm()}</div>
+				<div className="col-sm-7 ">
+					{alert ? (
+						<div class="alert alert-danger" role="alert">
+							<span className="alertmsg">
+								Employee with same email already Exist Please use different email.
+							</span>
+							<Button
+								className="btn btn-danger"
+								onClick={() => {
+									closeAlert();
+								}}
+							>
+								{' '}
+								Close{' '}
+							</Button>
+						</div>
+					) : (
+						<span />
+					)}
+
+					{addNewForm()}
+				</div>
 			</div>
 		</div>
 	);
 };
 
-AddNew.propTypes = {};
+
 
 export default AddNew;

@@ -4,13 +4,14 @@ import Header from '../Core/Headers/Headers';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import AddIcon from '@material-ui/icons/Add';
-import PropTypes from 'prop-types';
-import { getAllEmp, delEmp } from '../Admin/helper/adminapicalls';
+import { getAllEmp, updateEmployee } from '../Admin/helper/adminapicalls';
 import Table from 'react-bootstrap/Table';
+import moment from 'moment';
 
 const Button = styled.button`margin-right: 5px;`;
-const EmployeeList = (props) => {
+const Payrol = (props) => {
 	const [ employees, setEmployees ] = useState([]);
+	const [ reload, setreload ] = useState(false);
 
 	useEffect(() => {
 		const onLoad = () => {
@@ -24,26 +25,9 @@ const EmployeeList = (props) => {
 		onLoad();
 	}, []);
 
-	const deleteEmployee = (id, employee) => {
-		delEmp(employee).then((data) => {
-			console.log(id);
-			if (data !== undefined) {
-				const newarray = employees.filter((item) => {
-					return item._id !== id;
-				});
-
-				setEmployees(newarray);
-			}
-		});
-	};
-
-	//to do edit
-
-	//to do view
-
 	const EmployeeForm = () => (
 		<div>
-			<Header props={ props}/>
+			<Header props={props} />
 
 			<div className="row ">
 				<div className="col-sm-3">
@@ -57,32 +41,55 @@ const EmployeeList = (props) => {
 								<th>#</th>
 								<th>Name</th>
 								<th>Email</th>
-
-								<th>Action</th>
+								<th>Salary</th>
 							</tr>
 						</thead>
 						<tbody>
 							{employees && employees.length > 0 ? (
 								employees.map((emp, index) => (
-									 emp.role===0 && <tr key={index}>
-									<td>{index + 1}</td>
-									<td>{emp.name} </td>
-									<td>{emp.email}</td>
+								  emp.role===0 &&	<tr key={index}>
+										<td>{index + 1}</td>
+										<td>{emp.name} </td>
+										<td>{emp.email}</td>
 
-									<td>
-										<Button
-											className="btn btn-info"
-											onClick={(e) => {
-												deleteEmployee(emp._id, emp);
-											}}
-										>
-											Delete
-										</Button>
-										<Button className="btn btn-info">Edit</Button>
-										<Button className="btn btn-info">View</Button>
-									</td>
-								</tr>
-									
+										<td>
+										
+											{emp.salary === '0'||!moment().isBefore(moment(JSON.parse(emp.salary_date))) ? (
+												<div>
+													<div>
+														<input
+															onClick={() => {
+																setreload(!reload);
+															}}
+															class="form-check-input"
+															type="checkbox"
+															value=""
+															id="flexCheckDefault"
+														/>
+														<label class="form-check-label" for="flexCheckDefault">
+															Pay
+														</label>
+													</div>
+													<button
+														className="btn btn-sm btn-success"
+														onClick={() => {
+															console.log('clicked');
+															if (reload) {
+																emp.salary = '1';
+																emp.salary_date= JSON.stringify(moment().add(30,'s')) ;
+																updateEmployee(emp);
+																setreload(!reload);
+															}
+														}}
+													>
+														Submit
+													</button>
+												</div>
+											) : (
+												<h5>Paid</h5>
+											)}
+										</td>
+									</tr>
 								))
 							) : (
 								<tr>
@@ -100,14 +107,6 @@ const EmployeeList = (props) => {
 						</tbody>
 					</Table>
 				</div>
-				<div className="col-sm-2">
-					<div>
-						<Link className="btn btn-primary btn-lg" to="/admin/addnew">
-							{' '}
-							<AddIcon /> Add New
-						</Link>
-					</div>
-				</div>
 			</div>
 		</div>
 	);
@@ -115,6 +114,4 @@ const EmployeeList = (props) => {
 	return <div>{EmployeeForm()}</div>;
 };
 
-EmployeeList.propTypes = {};
-
-export default EmployeeList;
+export default Payrol;

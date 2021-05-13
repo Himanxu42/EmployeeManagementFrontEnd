@@ -1,27 +1,21 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { authenticated } from './helper';
 
-const UserRoute = ( {component:Component, ...rest }) => {
+const UserRoute = ({ component: Component, ...rest }) => {
+  const valid = authenticated();
     return (
-        <Route
-        {...rest}
-        render={({ props }) =>
-          auth.user ? ( // auth.user replace with logic to check for required needs
-                <Component{...props}/>
-          ) : ( 
-            <Redirect
-              to={{
-                pathname: "/login",
-                state: { from: props.location }
-              }}
-            />
-          )
-        }
-      />
+
+        // Show the component only when the user is logged in
+        // Otherwise, redirect the user to /signin page
+        <Route {...rest} render={props => (
+            valid.user && valid.user.role===0 ?
+                <Component {...props} />
+            : <Redirect to="/" />
+        )} />
     );
 };
 
-AdminRoute.propTypes = {};
 
 export default UserRoute;
